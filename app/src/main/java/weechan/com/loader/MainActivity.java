@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     loading1.finish();
                 }
 
+
                 state2 = (state2 + 1 ) % 4;
             }
         });
