@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import weechan.com.loading.Loading;
 import weechan.com.loading.LoadingBuilder;
@@ -41,12 +42,20 @@ public class MainActivity extends AppCompatActivity {
             public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
                 View view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.item, null, false);
-                return new Holder(view);
+                Holder holder =  new Holder(view);
+
+                Loading loading = new LoadingBuilder(viewGroup.getContext()).build(holder.textView);
+
+                loading
+                        .load();
+
+                return holder;
             }
 
             @Override
             public void onBindViewHolder(@NonNull Holder viewHolder, int i) {
                 viewHolder.textView.setText(i + " item ");
+
             }
 
             @Override
@@ -56,7 +65,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        final Loading loading = new LoadingBuilder(this).build(recyclerView);
+        final Loading loading = new LoadingBuilder(this).setOnLoadingClickListener(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "loading", Toast.LENGTH_SHORT).show();
+            }
+        }).setOnErrorClickListener(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
+            }
+        }).setOnRetryClickListener(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "retry", Toast.LENGTH_SHORT).show();
+            }
+        }).build(recyclerView);
         final Loading loading1 = new LoadingBuilder(this).build(findViewById(R.id.imageView));
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
